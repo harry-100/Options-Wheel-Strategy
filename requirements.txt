@@ -1,0 +1,11 @@
+pandas
+numpy
+requests
+schedule
+fastapi
+uvicorn
+streamlit
+yfinance
+plotly
+python-dotenv
+polygon-api-client
