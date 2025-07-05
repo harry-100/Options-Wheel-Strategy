@@ -30,13 +30,15 @@ def filter_csp_candidates(options_df, current_price, min_roi=1.0, max_dte=15):
     """
     results = []
     for _, row in options_df.iterrows():
-        dte = calculate_dte(row['expiration'])
+        # Use DTE from the data if available, otherwise calculate it
+        dte = row.get('dte', calculate_dte(row['expiration']))
         roi = calculate_roi(row['bid'], row['strike'])
 
         if (
             is_otm_put(current_price, row['strike']) and
             roi >= min_roi and
-            dte <= max_dte
+            dte <= max_dte and
+            row['bid'] is not None  # Ensure we have a valid price
         ):
             results.append({
                 "symbol": row['symbol'],
@@ -44,7 +46,13 @@ def filter_csp_candidates(options_df, current_price, min_roi=1.0, max_dte=15):
                 "expiration": row['expiration'],
                 "bid": row['bid'],
                 "roi_%": round(roi, 2),
-                "dte": dte
+                "dte": dte,
+                "delta": row.get('delta'),
+                "gamma": row.get('gamma'),
+                "theta": row.get('theta'),
+                "vega": row.get('vega'),
+                "implied_volatility": row.get('implied_volatility'),
+                "open_interest": row.get('open_interest', 0)
             })
 
     return pd.DataFrame(results)
@@ -75,13 +83,15 @@ def covered_call_candidates(assigned_stock_df, call_options_df, min_roi=1.0, max
     current_price = assigned_stock_df['current_price']
     results = []
     for _, row in call_options_df.iterrows():
-        dte = calculate_dte(row['expiration'])
+        # Use DTE from the data if available, otherwise calculate it
+        dte = row.get('dte', calculate_dte(row['expiration']))
         roi = calculate_roi(row['bid'], current_price)
 
         if (
             is_otm_call(current_price, row['strike']) and
             roi >= min_roi and
-            dte <= max_dte
+            dte <= max_dte and
+            row['bid'] is not None  # Ensure we have a valid price
         ):
             results.append({
                 "symbol": row['symbol'],
@@ -89,7 +99,13 @@ def covered_call_candidates(assigned_stock_df, call_options_df, min_roi=1.0, max
                 "expiration": row['expiration'],
                 "bid": row['bid'],
                 "roi_%": round(roi, 2),
-                "dte": dte
+                "dte": dte,
+                "delta": row.get('delta'),
+                "gamma": row.get('gamma'),
+                "theta": row.get('theta'),
+                "vega": row.get('vega'),
+                "implied_volatility": row.get('implied_volatility'),
+                "open_interest": row.get('open_interest', 0)
             })
 
     return pd.DataFrame(results)

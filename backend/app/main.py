@@ -3,6 +3,7 @@ from app.api import strategies
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Wheel Strategy AI Agent")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # or ["http://localhost:5173"] for stricter security

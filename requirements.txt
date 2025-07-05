@@ -9,3 +9,5 @@ yfinance
 plotly
 python-dotenv
 polygon-api-client
+ib_insync
+python-dateutil

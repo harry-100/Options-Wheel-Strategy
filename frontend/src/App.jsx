@@ -30,12 +30,12 @@ const App = () => {
       // build all API calls for CSP & CC
       const cspPromises = symbols.map((sym) =>
         axios.get(
-          `http://localhost:8000/api/strategy/csp?ticker=${sym}&min_roi=${minRoi}&min_dte=${minDte}&max_dte=${maxDte}`
+          `http://localhost:8000/api/strategy/csp/polygon?ticker=${sym}&min_roi=${minRoi}&min_dte=${minDte}&max_dte=${maxDte}`
         )
       );
       const ccPromises = symbols.map((sym) =>
         axios.get(
-          `http://localhost:8000/api/strategy/cc?ticker=${sym}&min_roi=${minRoi}&min_dte=${minDte}&max_dte=${maxDte}`
+          `http://localhost:8000/api/strategy/cc/polygon?ticker=${sym}&min_roi=${minRoi}&min_dte=${minDte}&max_dte=${maxDte}`
         )
       );
 
